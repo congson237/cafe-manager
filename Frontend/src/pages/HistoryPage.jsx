@@ -394,60 +394,50 @@ export default function HistoryPage() {
                 </div>
               )}
 
-              {selectedOrder.status === 'preparing' && (
-                <div className="space-y-2 pt-2">
-                  <div className="flex gap-2">
-                    <button
-                      type="button"
-                      disabled={updating}
-                      onClick={() =>
-                        handleChangeStatus(
-                          selectedOrder._id,
-                          'completed',
-                          'cash'
-                        )
-                      }
-                      className="flex-1 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-lg disabled:opacity-50"
-                    >
-                      Hoàn thành (tiền mặt)
-                    </button>
-                    <button
-                      type="button"
-                      disabled={updating}
-                      onClick={() =>
-                        handleChangeStatus(
-                          selectedOrder._id,
-                          'completed',
-                          'transfer'
-                        )
-                      }
-                      className="flex-1 py-2.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 text-sm font-medium rounded-lg disabled:opacity-50"
-                    >
-                      Chuyển khoản
-                    </button>
-                  </div>
-                  <button
-                    type="button"
-                    disabled={updating}
-                    onClick={() =>
-                      handleChangeStatus(selectedOrder._id, 'cancelled')
-                    }
-                    className="w-full py-2.5 border border-red-200 text-red-600 text-sm font-medium rounded-lg hover:bg-red-50 disabled:opacity-50"
-                  >
-                    Hủy đơn
-                  </button>
-                </div>
-              )}
+            {selectedOrder.status === 'preparing' && (
+              <div className="flex gap-2 pt-2">
+                <button
+                  type="button"
+                  disabled={updating}
+                  onClick={() =>
+                    handleChangeStatus(selectedOrder._id, 'completed', 'cash')
+                  }
+                  className={`flex-1 py-2.5 text-sm font-medium rounded-lg disabled:opacity-50 ${
+                    selectedOrder.paymentMethod === 'cash' || !selectedOrder.paymentMethod
+                      ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                      : 'bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100'
+                  }`}
+                >
+                  tiền mặt
+                </button>
+                <button
+                  type="button"
+                  disabled={updating}
+                  onClick={() =>
+                    handleChangeStatus(selectedOrder._id, 'completed', 'transfer')
+                  }
+                  className={`flex-1 py-2.5 text-sm font-medium rounded-lg disabled:opacity-50 ${
+                    selectedOrder.paymentMethod === 'transfer'
+                      ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                      : 'bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100'
+                  }`}
+                >
+                  Chuyển khoản
+                </button>
+              </div>
+            )}
             </div>
 
-            <div className="px-5 py-4 border-t border-gray-100 space-y-2">
-              <button
-                type="button"
-                onClick={() => printBill(selectedOrder)}
-                className="w-full py-2.5 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50"
-              >
-                In bill
-              </button>
+           <div className="px-5 py-4 border-t border-gray-100 space-y-2">
+              {selectedOrder.status !== 'cancelled' && (
+                <button
+                  type="button"
+                  onClick={() => printBill(selectedOrder)}
+                  className="w-full py-2.5 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50"
+                >
+                  In bill
+                </button>
+              )}
               <button
                 type="button"
                 onClick={() => setSelectedOrder(null)}
